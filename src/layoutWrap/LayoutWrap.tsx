@@ -5,12 +5,9 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  PieChartOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
-import { Layout, Menu, Button, theme } from 'antd'
+import { Layout, Menu, Button, theme, Dropdown, Space, Avatar } from 'antd'
 import type { MenuProps } from 'antd'
 import style from './LayoutWrap.module.scss'
 
@@ -25,6 +22,13 @@ type IProps = {
 export default function LayoutWrap(props: IProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [menuList, setMenuList] = useState([])
+
+  const dropdownMenu: MenuProps['items'] = [
+    {
+      label: '退出登录',
+      key: 'loginOut',
+    },
+  ]
 
   const {
     token: { colorBgContainer },
@@ -54,9 +58,12 @@ export default function LayoutWrap(props: IProps) {
   function renderItem(arr: any) {
     return arr.map((s: any) => {
       if (s.children && s.children.length > 0) {
-        return getItem(s.title, s.key, s.icon, renderItem(s.children))
+        return (
+          s.pagepermisson === 1 &&
+          getItem(s.title, s.key, s.icon, renderItem(s.children))
+        )
       } else {
-        return getItem(s.title, s.key, s.icon)
+        return s.pagepermisson === 1 && getItem(s.title, s.key, s.icon)
       }
     })
   }
@@ -81,6 +88,13 @@ export default function LayoutWrap(props: IProps) {
   const onMenuSelect = (e: any) => {
     navigate(e.key)
   }
+  // 下拉菜单选中
+  const onDrodownClick: MenuProps['onClick'] = ({ key }) => {
+    if (key === 'loginOut') {
+      console.log('退出')
+    }
+  }
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -97,7 +111,10 @@ export default function LayoutWrap(props: IProps) {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header
+          className={style.header_wrap}
+          style={{ padding: 0, background: colorBgContainer }}
+        >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -108,6 +125,19 @@ export default function LayoutWrap(props: IProps) {
               height: 64,
             }}
           />
+          <Dropdown
+            className={style.login_wrap}
+            menu={{ items: dropdownMenu, onClick: onDrodownClick }}
+          >
+            <Space>
+              <div>
+                <span>欢迎</span>
+                <span style={{ color: 'green' }}>mingzi1</span>
+                <span>回来</span>
+              </div>
+              <Avatar size={32} icon={<UserOutlined />} />
+            </Space>
+          </Dropdown>
         </Header>
         <Content
           style={{
@@ -115,6 +145,7 @@ export default function LayoutWrap(props: IProps) {
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
+            overflow: 'auto',
           }}
         >
           {props.children}
