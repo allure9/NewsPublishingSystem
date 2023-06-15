@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './Login.module.scss'
 import { useNavigate } from 'react-router-dom'
-import { Button, Checkbox, Form, Input } from 'antd'
+import { Button, Form, Input } from 'antd'
 
 type IProps = {
   children?: any
