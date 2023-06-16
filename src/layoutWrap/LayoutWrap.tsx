@@ -10,6 +10,8 @@ import {
 import { Layout, Menu, Button, theme, Dropdown, Space, Avatar } from 'antd'
 import type { MenuProps } from 'antd'
 import style from './LayoutWrap.module.scss'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const { Header, Sider, Content } = Layout
 
@@ -26,6 +28,13 @@ type anyProps = {
 export default function LayoutWrap(props: IProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [menuList, setMenuList] = useState([])
+
+  // 渲染开始
+  NProgress.start()
+  // 渲染结束开始发送请求时
+  useEffect(() => {
+    NProgress.done()
+  })
 
   // 获取用户登录信息
   const userInfo: anyProps = JSON.parse(localStorage.getItem('token') as any)

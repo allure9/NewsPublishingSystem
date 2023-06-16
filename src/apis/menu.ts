@@ -7,6 +7,10 @@ const menuApi = {
 }
 
 const menuService = {
+  getRights: () =>
+    request({
+      url: menuApi.menus,
+    }),
   getMenus: (params: { _embed: string }) =>
     request({
       url: menuApi.menus,
