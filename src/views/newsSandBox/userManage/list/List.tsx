@@ -24,6 +24,10 @@ type IProps = {
   children?: any
 }
 
+type anyProps = {
+  [propName: string]: any
+}
+
 const { confirm } = Modal
 
 export default function List(props: IProps) {
@@ -37,6 +41,8 @@ export default function List(props: IProps) {
   const addFormRef = useRef(null as any)
   const updateFormRef = useRef({} as any)
 
+  // 获取用户登录信息
+  const userInfo: anyProps = JSON.parse(localStorage.getItem('token') as any)
   const columns: ColumnsType<DataType> = [
     {
       title: '区域',
@@ -112,14 +118,30 @@ export default function List(props: IProps) {
 
   // 获取列表
   useEffect(() => {
+    const roleObj: anyProps = {
+      1: 'superadmin',
+      2: 'admin',
+      3: 'editor',
+    }
     const params = {
       _expand: 'role',
     }
     userService.getUsers(params).then((res: any) => {
-      SetList(res.data)
+      SetList(
+        roleObj[userInfo.roleId] === 'superadmin'
+          ? res.data
+          : [
+              ...res.data.filter((s: any) => {
+                s.username === userInfo.username
+              }),
+              ...res.data.filter((s: any) => {
+                s.region === userInfo.region && roleObj[s.roleId] === 'editor'
+              }),
+            ]
+      )
       console.log(res)
     })
-  }, [])
+  }, [userInfo.roleId, userInfo.username, userInfo.region])
   // 获取角色列表
   useEffect(() => {
     roleService.getRoles().then((res: any) => {
@@ -271,6 +293,7 @@ export default function List(props: IProps) {
           roleList={roleList as []}
           regionList={regionList as []}
           isUpdateDisabled={isUpdateDisabled}
+          isUpdate={true}
         ></UserForm>
       </Modal>
     </div>

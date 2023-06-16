@@ -4,6 +4,13 @@ interface AddData {
   [propName: string]: any
 }
 
+interface Ilogin {
+  username: string
+  password: string | number
+  roleState: boolean | string
+  _expand: string
+}
+
 const userApi = {
   users: '/users',
   usersFun: (id: number) => `/users/${id}`,
@@ -37,6 +44,11 @@ const userService = {
       url: userApi.usersFun(id),
       method: 'patch',
       data,
+    }),
+  toLogin: (params: Ilogin) =>
+    request({
+      url: userApi.users,
+      params,
     }),
 }
 

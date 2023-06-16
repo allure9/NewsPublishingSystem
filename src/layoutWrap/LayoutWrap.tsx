@@ -19,11 +19,22 @@ type IProps = {
   children?: any
 }
 
+type anyProps = {
+  [propName: string]: any
+}
+
 export default function LayoutWrap(props: IProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [menuList, setMenuList] = useState([])
 
+  // 获取用户登录信息
+  const userInfo: anyProps = JSON.parse(localStorage.getItem('token') as any)
+
   const dropdownMenu: MenuProps['items'] = [
+    {
+      label: userInfo.role.roleName,
+      key: 'role',
+    },
     {
       label: '退出登录',
       key: 'loginOut',
@@ -57,13 +68,22 @@ export default function LayoutWrap(props: IProps) {
 
   function renderItem(arr: any) {
     return arr.map((s: any) => {
-      if (s.children && s.children.length > 0) {
+      if (
+        s.children &&
+        s.children.length > 0 &&
+        s.pagepermisson &&
+        userInfo.role.rights.includes(s.key)
+      ) {
         return (
           s.pagepermisson === 1 &&
           getItem(s.title, s.key, s.icon, renderItem(s.children))
         )
       } else {
-        return s.pagepermisson === 1 && getItem(s.title, s.key, s.icon)
+        return (
+          userInfo.role.rights.includes(s.key) &&
+          s.pagepermisson === 1 &&
+          getItem(s.title, s.key, s.icon)
+        )
       }
     })
   }
@@ -91,7 +111,8 @@ export default function LayoutWrap(props: IProps) {
   // 下拉菜单选中
   const onDrodownClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'loginOut') {
-      console.log('退出')
+      navigate('/login')
+      localStorage.removeItem('token')
     }
   }
 
@@ -132,7 +153,9 @@ export default function LayoutWrap(props: IProps) {
             <Space>
               <div>
                 <span>欢迎</span>
-                <span style={{ color: 'green' }}>mingzi1</span>
+                <span style={{ color: 'green' }}>
+                  {userInfo.username as string}
+                </span>
                 <span>回来</span>
               </div>
               <Avatar size={32} icon={<UserOutlined />} />
