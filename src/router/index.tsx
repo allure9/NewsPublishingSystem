@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useRoutes, Navigate } from 'react-router-dom'
+import { useRoutes, useNavigate, Navigate } from 'react-router-dom'
 import lazyLoad from './lazyLoad'
 import AuthComponent from './authComponent'
 import Index from '../views/newsSandBox/Index'
@@ -35,6 +35,14 @@ const LocalRouterMap: any = {
     path: 'news-manage/category',
     localPath: '/newsSandBox/newsManage/category/Category',
   },
+  '/news-manage/preview/:id': {
+    path: `news-manage/preview/:id`,
+    localPath: '/newsSandBox/newsManage/preview/Preview',
+  },
+  '/news-manage/update/:id': {
+    path: `news-manage/update/:id`,
+    localPath: '/newsSandBox/newsManage/update/Update',
+  },
   '/audit-manage/audit': {
     path: 'audit-manage/audit',
     localPath: '/newsSandBox/newsManage/audit/Audit',
@@ -64,6 +72,7 @@ type anyProps = {
 export default function Router() {
   const [baseRoutes, setBaseRoutes] = useState([] as any)
 
+  const navigate = useNavigate()
   // 获取用户登录信息
   const userInfo: anyProps = JSON.parse(localStorage.getItem('token') as any)
   const checkRoute = (item: any) => {
@@ -73,12 +82,42 @@ export default function Router() {
   }
   // 登录的用户有该权限
   const checkUserPermission = (item: any) => {
-    return userInfo.role.rights.includes(item.key)
+    return userInfo?.role.rights.includes(item.key)
   }
 
   useEffect(() => {
-    Promise.all([menuService.getRights(), childrenService.getChildren()]).then(
-      (res) => {
+    if (!userInfo) {
+      setBaseRoutes([
+        {
+          path: '/login',
+          element: lazyLoad('/login/Login'),
+        },
+        {
+          path: '/',
+          element: (
+            <AuthComponent>
+              <Index></Index>
+            </AuthComponent>
+          ),
+          children: [
+            {
+              path: '',
+              element: <Navigate to={'/home'}></Navigate>,
+            },
+            {
+              // 403
+              path: '*',
+              element: lazyLoad('/newsSandBox/403/NoFound'),
+            },
+          ],
+        },
+      ])
+      navigate('/login')
+    } else {
+      Promise.all([
+        menuService.getRights(),
+        childrenService.getChildren(),
+      ]).then((res) => {
         const BackRoteList = [...res[0].data, ...res[1].data]
         const authRoutes = BackRoteList.map((s: any) => {
           if (checkRoute(s) && checkUserPermission(s)) {
@@ -123,8 +162,8 @@ export default function Router() {
             ],
           },
         ])
-      }
-    )
+      })
+    }
   }, [])
 
   const element = useRoutes(baseRoutes)

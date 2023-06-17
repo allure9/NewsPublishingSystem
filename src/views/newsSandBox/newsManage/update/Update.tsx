@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Steps, Form, Input, Select, message, notification } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import style from './Add.module.scss'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
+import style from './Update.module.scss'
 import newsService from '../../../../apis/news'
 import NewsEditor from '../../../../components/newsMange/newsEditor/index'
+import axios from 'axios'
 
 type IProps = {
   children?: any
@@ -16,20 +18,20 @@ type anyProps = {
 type IAddNews = {
   categoryId?: string | number
   title?: string
-  content: string
-  region: string
-  author: string
-  roleId: string | number
-  auditState: number
-  publishState: number
-  createTime: string | number
-  star: number
-  view: number
+  content?: string
+  region?: string
+  author?: string
+  roleId?: string | number
+  auditState?: number
+  publishState?: number
+  createTime?: string | number
+  star?: number
+  view?: number
 }
 
 const { Option } = Select
 
-export default function Add(props: IProps) {
+export default function Update(props: IProps) {
   const [current, setCurrent] = useState(0)
   const [categoryList, setCategoryList] = useState([])
   const [formInfo, setFormInfo] = useState({})
@@ -37,6 +39,7 @@ export default function Add(props: IProps) {
   const oneForm = useRef(null as any)
 
   const navigate = useNavigate()
+  const params = useParams()
 
   // 获取用户登录信息
   const userInfo: anyProps = JSON.parse(localStorage.getItem('token') as any)
@@ -46,6 +49,22 @@ export default function Add(props: IProps) {
       setCategoryList(res.data)
     })
   }, [])
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3000/news/${params.id}?_expand=category&_expand=role`
+      )
+      .then((res) => {
+        console.log(res)
+        setContent(res.data.content)
+        oneForm.current.setFieldsValue({
+          categoryId: res.data.categoryId,
+          title: res.data.title,
+        })
+      })
+  }, [params.id])
+
   const categorySelect = (x: any) => {
     console.log(oneForm)
   }
@@ -54,17 +73,9 @@ export default function Add(props: IProps) {
       // title和分类
       ...formInfo,
       content: content,
-      // 本地中已经存好
-      region: userInfo.region ? userInfo.region : '全球',
-      author: userInfo.username,
-      roleId: userInfo.roleId,
       auditState: x,
-      publishState: 0,
-      createTime: Date.now(),
-      star: 0,
-      view: 0,
     }
-    newsService.addNews(data).then((res) => {
+    newsService.updateNews(params.id as string, data).then((res) => {
       // 传0表示跳转至草稿箱列表，传1表示跳转到审核列表
       navigate(x === 0 ? '/news-manage/draft' : '/audit-manage/list')
       notification.info({
@@ -100,7 +111,16 @@ export default function Add(props: IProps) {
   }
   return (
     <div>
-      <div className={style.add_title}>撰写新闻</div>
+      <div
+        style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}
+      >
+        <ArrowLeftOutlined
+          onClick={() => {
+            navigate(-1)
+          }}
+        />
+        <div className={style.add_title}>撰写新闻</div>
+      </div>
       <Steps
         current={2}
         items={[
@@ -155,6 +175,7 @@ export default function Add(props: IProps) {
             getContent={(value: any) => {
               setContent(value)
             }}
+            content={content}
           ></NewsEditor>
         </div>
 

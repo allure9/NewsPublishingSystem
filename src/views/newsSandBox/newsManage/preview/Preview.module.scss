@@ -1,0 +1,16 @@
+.top_wrap {
+  margin-bottom: 30px;
+}
+.flex_wp {
+  display: flex;
+  align-items: center;
+}
+.title_wrap {
+  margin-bottom: 20px;
+}
+.info_item {
+  margin-bottom: 10px;
+  .flex_1 {
+    flex: 1;
+  }
+}
