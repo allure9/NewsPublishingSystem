@@ -24,6 +24,9 @@ type IGetNews = {
   auditState?: string | number
   _expand?: string
   publishState?: string | number
+  _sort?: string
+  _order?: string
+  _limit?: string | number
 }
 
 type IAuditList = {

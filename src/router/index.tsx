@@ -93,6 +93,14 @@ export default function Router() {
           element: lazyLoad('/login/Login'),
         },
         {
+          path: '/news',
+          element: lazyLoad('/news/News'),
+        },
+        {
+          path: '/detail/:id',
+          element: lazyLoad('/detail/Detail'),
+        },
+        {
           path: '/',
           element: (
             <AuthComponent>
@@ -140,6 +148,14 @@ export default function Router() {
           {
             path: '/login',
             element: lazyLoad('/login/Login'),
+          },
+          {
+            path: '/news',
+            element: lazyLoad('/news/News'),
+          },
+          {
+            path: '/detail/:id',
+            element: lazyLoad('/detail/Detail'),
           },
           {
             path: '/',
