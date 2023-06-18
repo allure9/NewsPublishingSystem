@@ -7,11 +7,21 @@ import {
   AppstoreOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { Layout, Menu, Button, theme, Dropdown, Space, Avatar } from 'antd'
+import {
+  Layout,
+  Menu,
+  Button,
+  theme,
+  Dropdown,
+  Space,
+  Avatar,
+  Spin,
+} from 'antd'
 import type { MenuProps } from 'antd'
 import style from './LayoutWrap.module.scss'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { connect } from 'react-redux'
 
 const { Header, Sider, Content } = Layout
 
@@ -19,14 +29,16 @@ type MenuItem = Required<MenuProps>['items'][number]
 
 type IProps = {
   children?: any
+  isCollapsed: boolean
+  isLoading: boolean
+  changeCollapsed: () => any
 }
 
 type anyProps = {
   [propName: string]: any
 }
 
-export default function LayoutWrap(props: IProps) {
-  const [collapsed, setCollapsed] = useState(false)
+function LayoutWrap(props: IProps) {
   const [menuList, setMenuList] = useState([])
 
   // 渲染开始
@@ -58,6 +70,11 @@ export default function LayoutWrap(props: IProps) {
   const location = useLocation()
   const selectKey = [location.pathname]
   const openKey = ['/' + location.pathname.split('/')[1]]
+
+  const changeIsCollapsed = () => {
+    console.log(props)
+    props.changeCollapsed()
+  }
 
   function getItem(
     label: React.ReactNode,
@@ -98,6 +115,7 @@ export default function LayoutWrap(props: IProps) {
   }
   // 获取路由列表
   useEffect(() => {
+    console.log(props)
     const params = {
       _embed: 'children',
     }
@@ -127,7 +145,7 @@ export default function LayoutWrap(props: IProps) {
 
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
         <div className={style.nav_title}>新闻管理系统</div>
         <Menu
           defaultSelectedKeys={selectKey}
@@ -147,8 +165,10 @@ export default function LayoutWrap(props: IProps) {
         >
           <Button
             type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+            icon={
+              props.isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+            }
+            onClick={() => changeIsCollapsed()}
             style={{
               fontSize: '16px',
               width: 64,
@@ -180,9 +200,29 @@ export default function LayoutWrap(props: IProps) {
             overflow: 'auto',
           }}
         >
-          {props.children}
+          <Spin size="large" spinning={props.isLoading}>
+            {props.children}
+          </Spin>
         </Content>
       </Layout>
     </Layout>
   )
 }
+
+const mapStateToProps = (state: any) => {
+  console.log(state)
+  return {
+    isCollapsed: state.collaspesdReducer.isCollapsed,
+    isLoading: state.loadingReducer.isLoading,
+  }
+}
+
+const mapDispatchToProps = {
+  changeCollapsed() {
+    return {
+      type: 'change_collasped',
+    }
+  },
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LayoutWrap)

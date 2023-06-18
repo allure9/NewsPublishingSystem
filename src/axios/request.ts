@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { store } from '../redux/store'
 
 const request = axios.create({
   // baseURL: process.env.REACT_APP_BASE_API,
@@ -11,6 +12,10 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
+    store.dispatch({
+      type: 'change_isLoading',
+      payLoad: true,
+    })
     return config
   },
   (err) => {
@@ -20,6 +25,10 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
   (response) => {
+    store.dispatch({
+      type: 'change_isLoading',
+      payLoad: false,
+    })
     return response
   },
   (err) => {

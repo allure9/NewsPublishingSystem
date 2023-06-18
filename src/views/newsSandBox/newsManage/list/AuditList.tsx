@@ -36,6 +36,7 @@ type IAddNews = {
   createTime?: string | number
   star?: number
   view?: number
+  publishTime?: string | number
 }
 
 export default function AuditList() {
@@ -140,6 +141,7 @@ export default function AuditList() {
   const handlePublish = (item: RoleObjType) => {
     const data: IAddNews = {
       publishState: 2,
+      publishTime: Date.now(),
     }
     newsService.updateNews(item.id, data).then((res) => {
       navigate(`/publish-manage/published`)

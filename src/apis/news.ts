@@ -12,6 +12,7 @@ type IAddNews = {
   createTime?: string | number
   star?: number
   view?: number
+  publishTime?: string | number
 }
 
 type IGetDetail = {
@@ -22,6 +23,7 @@ type IGetNews = {
   author?: string
   auditState?: string | number
   _expand?: string
+  publishState?: string | number
 }
 
 type IAuditList = {
@@ -31,8 +33,14 @@ type IAuditList = {
   _expand: string
 }
 
+type IUpdateCategory = {
+  title: string
+  value: string
+}
+
 const Api = {
   category: '/categories',
+  categoryFunc: (id: string | number) => `/categories/${id}`,
   news: '/news',
   newsFunc: (id: string | number) => `/news/${id}`,
 }
@@ -41,6 +49,17 @@ const newsService = {
   getCategory: () =>
     request({
       url: Api.category,
+    }),
+  deleteCategory: (id: string | number) =>
+    request({
+      url: Api.categoryFunc(id),
+      method: 'delete',
+    }),
+  updateCategory: (id: string | number, data: IUpdateCategory) =>
+    request({
+      url: Api.categoryFunc(id),
+      method: 'patch',
+      data,
     }),
   addNews: (data: IAddNews) =>
     request({
