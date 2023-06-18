@@ -106,7 +106,6 @@ export default function Audit() {
               }),
             ]
       )
-      console.log(res.data)
       setList(res.data)
     })
   }, [userInfo.roleId, userInfo.username, userInfo.region])

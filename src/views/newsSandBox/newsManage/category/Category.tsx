@@ -94,7 +94,6 @@ export default function Category(props: IProps) {
   useEffect(() => {
     newsService.getCategory().then((res: any) => {
       SetList(res.data)
-      console.log(res)
     })
   }, [])
   // 删除对话框

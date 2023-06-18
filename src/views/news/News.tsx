@@ -17,7 +17,6 @@ export default function News(props: IProps) {
       publishState: 2,
     }
     newsService.getNews(parmas).then((res: any) => {
-      console.log(res)
       setList(
         Object.entries(_.groupBy(res.data, (item) => item.category.title))
       )

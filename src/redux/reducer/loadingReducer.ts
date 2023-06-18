@@ -18,7 +18,6 @@ const loadingReducer = (
   action: InterfaceAction
 ): any => {
   let newPreState = fromJS(preState)
-  console.log(action.type)
   switch (action.type) {
     case 'change_isLoading':
       newPreState = newPreState.setIn(['isLoading'], action.payLoad)

@@ -21,7 +21,6 @@ export default function Index(props: IProps) {
   }
 
   useEffect(() => {
-    console.log(props.content)
     setHtml(props.content as string)
   }, [props.content])
   return (

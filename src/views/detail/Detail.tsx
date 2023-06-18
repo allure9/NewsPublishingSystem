@@ -22,7 +22,6 @@ export default function Detail() {
         `http://localhost:3000/news/${params.id}?_expand=category&_expand=role`
       )
       .then((res) => {
-        console.log(res)
         setDetail({ ...res.data, view: res.data.view + 1 })
         return res.data
       })

@@ -17,7 +17,6 @@ function usePublish(types: number) {
       publishState: types,
     }
     newsService.getNews(parmas).then((res) => {
-      console.log(res)
       setList(res.data)
     })
   }, [userInfo.username, types])

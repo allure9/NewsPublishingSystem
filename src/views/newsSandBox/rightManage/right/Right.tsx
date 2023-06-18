@@ -124,7 +124,6 @@ export default function Right(props: IProps) {
   }
   // 删除
   const deleteRight = (x: RoleObjType) => {
-    console.log('删除', x)
     if (x.grade === 1) {
       menuService.deleteRights(x.id).then((res) => {
         SetList(list.filter((i: any) => i.id !== x.id))
@@ -132,7 +131,6 @@ export default function Right(props: IProps) {
     } else {
       menuService.deleteChilrenRight(x.id).then((res) => {
         const parentList = list.filter((i: any) => i.id === x.rightId)
-        console.log('parentList', parentList, list)
         parentList[0].children = parentList[0].children.filter(
           (s: any) => s.id !== x.id
         )
@@ -155,7 +153,6 @@ export default function Right(props: IProps) {
         SetList([...list])
       })
     }
-    console.log('编辑', x)
   }
   return (
     <div>

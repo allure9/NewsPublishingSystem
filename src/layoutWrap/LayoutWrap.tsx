@@ -31,6 +31,7 @@ type IProps = {
   children?: any
   isCollapsed: boolean
   isLoading: boolean
+  userInfo?: any
   changeCollapsed: () => any
 }
 
@@ -72,7 +73,6 @@ function LayoutWrap(props: IProps) {
   const openKey = ['/' + location.pathname.split('/')[1]]
 
   const changeIsCollapsed = () => {
-    console.log(props)
     props.changeCollapsed()
   }
 
@@ -115,7 +115,6 @@ function LayoutWrap(props: IProps) {
   }
   // 获取路由列表
   useEffect(() => {
-    console.log(props)
     const params = {
       _embed: 'children',
     }
@@ -210,10 +209,10 @@ function LayoutWrap(props: IProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log(state)
   return {
     isCollapsed: state.collaspesdReducer.isCollapsed,
     isLoading: state.loadingReducer.isLoading,
+    userInfo: state.userInfoReducer.userInfo,
   }
 }
 

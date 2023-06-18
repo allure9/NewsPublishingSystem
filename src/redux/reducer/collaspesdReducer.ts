@@ -18,7 +18,6 @@ const collaspesdReducer = (
   action: InterfaceAction
 ): any => {
   let newPreState = fromJS(preState)
-  console.log(action.type)
   switch (action.type) {
     case 'change_collasped':
       newPreState = newPreState.setIn(

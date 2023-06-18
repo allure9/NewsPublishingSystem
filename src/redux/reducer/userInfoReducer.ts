@@ -6,11 +6,11 @@ interface InterfaceAction {
 }
 
 interface InterfaceState {
-  num: number
+  userInfo: any
 }
 
 const state: InterfaceState = {
-  num: 0,
+  userInfo: {},
 }
 
 const reducer1 = (
@@ -19,13 +19,12 @@ const reducer1 = (
 ): any => {
   let newPreState = fromJS(preState)
   switch (action.type) {
-    case '1':
-      newPreState = newPreState.setIn(['num'], 1)
+    case 'change_userInfo':
+      newPreState = newPreState.setIn(['userInfo'], action.userInfo)
       return newPreState.toJS()
     default:
-      break
+      return newPreState.toJS()
   }
-  return newPreState.toJS()
 }
 
 export default reducer1

@@ -114,7 +114,6 @@ export default function Draft(props: IProps) {
     }
     newsService.getNews(params).then((res: any) => {
       SetList(res.data)
-      console.log(res)
     })
   }, [userInfo.username])
   // 删除对话框

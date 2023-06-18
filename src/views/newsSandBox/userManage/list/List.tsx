@@ -139,7 +139,6 @@ export default function List(props: IProps) {
               }),
             ]
       )
-      console.log(res)
     })
   }, [userInfo.roleId, userInfo.username, userInfo.region])
   // 获取角色列表

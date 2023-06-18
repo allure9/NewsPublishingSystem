@@ -92,7 +92,6 @@ export default function Add(props: IProps) {
       } else {
         setCurrent(current + 1)
       }
-      console.log(formInfo, content)
     }
   }
   const handlePrevious = () => {

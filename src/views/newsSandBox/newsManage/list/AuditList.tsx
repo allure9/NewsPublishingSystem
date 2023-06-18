@@ -117,7 +117,6 @@ export default function AuditList() {
       _expand: 'category',
     }
     newsService.getAuditList(params).then((res) => {
-      console.log(res.data)
       setList(res.data)
     })
   }, [userInfo.username])

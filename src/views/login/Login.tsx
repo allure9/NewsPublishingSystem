@@ -6,6 +6,7 @@ import type { Container, Engine } from 'tsparticles-engine'
 import Particles from 'react-particles'
 import { loadFull } from 'tsparticles'
 import userService from '../../apis/user'
+import { store } from '../../redux/store'
 
 type IProps = {
   children?: any
@@ -37,6 +38,10 @@ export default function Login(props: IProps) {
         message.info('用户名或密码错误')
       } else {
         localStorage.setItem('token', JSON.stringify(res.data[0]))
+        store.dispatch({
+          type: 'change_userInfo',
+          userInfo: res.data[0],
+        })
         navigate('/')
       }
     })

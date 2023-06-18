@@ -56,7 +56,6 @@ export default function Update(props: IProps) {
         `http://localhost:3000/news/${params.id}?_expand=category&_expand=role`
       )
       .then((res) => {
-        console.log(res)
         setContent(res.data.content)
         oneForm.current.setFieldsValue({
           categoryId: res.data.categoryId,
@@ -103,7 +102,6 @@ export default function Update(props: IProps) {
       } else {
         setCurrent(current + 1)
       }
-      console.log(formInfo, content)
     }
   }
   const handlePrevious = () => {

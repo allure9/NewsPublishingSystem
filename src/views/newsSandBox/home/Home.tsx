@@ -40,7 +40,6 @@ export default function Home(props: IProps) {
       _limit: 6,
     }
     newsService.getNews(parmas).then((res: any) => {
-      console.log(res)
       setViewList(res.data)
     })
   }, [])
@@ -54,7 +53,6 @@ export default function Home(props: IProps) {
       _limit: 6,
     }
     newsService.getNews(parmas).then((res: any) => {
-      console.log(res)
       setStarList(res.data)
     })
   }, [])

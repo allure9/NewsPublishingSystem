@@ -5,7 +5,7 @@ import {
 } from 'redux'
 import reduxThunk from 'redux-thunk'
 import reduxPromise from 'redux-promise'
-import reducer1 from './reducer/reducer1'
+import userInfoReducer from './reducer/userInfoReducer'
 import collaspesdReducer from './reducer/collaspesdReducer'
 import loadingReducer from './reducer/loadingReducer'
 import { persistReducer, persistStore } from 'redux-persist'
@@ -20,7 +20,7 @@ const persistConfig = {
 }
 
 const reducer = combineReducers({
-  reducer1,
+  userInfoReducer,
   collaspesdReducer,
   loadingReducer,
 })

@@ -103,7 +103,6 @@ export default function Role(props: IProps) {
   useEffect(() => {
     roleService.getRoles().then((res: any) => {
       SetList(res.data)
-      console.log(res)
     })
   }, [])
   // 获取权限列表
@@ -113,7 +112,6 @@ export default function Role(props: IProps) {
     }
     menuService.getMenus(params).then((res: any) => {
       setRoleTree(res.data)
-      console.log(res)
     })
   }, [])
   // 删除对话框
@@ -132,7 +130,6 @@ export default function Role(props: IProps) {
   }
   // 删除
   const deleteRight = (x: RoleObjType) => {
-    console.log('删除', x)
     roleService.deleteRoles(x.id).then((res) => {
       SetList(list.filter((i) => i.id !== x.id))
     })
